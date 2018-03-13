@@ -48,15 +48,59 @@ var calc_mean_by_season = function (ic_season) {
     return image;
 };
 
+
 // Chama das funções + visualização
 anos.map(filtrar_umido);
 anos.map(filtrar_seco);
-print(ndwi_umido);
-print(ndwi_seco);
+print('Período Umido: ', ndwi_umido);
+print('Período Seco: ', ndwi_seco);
 var col_mean_umido = ndwi_umido.map(calc_mean_by_season);
 var col_mean_seco = ndwi_seco.map(calc_mean_by_season);
 // print(col_mean);
-Map.addLayer(col_mean_seco[1].select('NDWI'));
+// Map.addLayer(col_mean_seco[1].select('NDWI'));
 Map.addLayer(pantanal);
 
-// Adicionar funções de limiar
+// Clip collection
+var clip_ndwi_pantanal = function (collection) {
+    var ndwi = collection.select('NDWI');
+    var col_clip = ndwi.clip(pantanal);
+    return col_clip;
+};
+
+// Apply clip
+var umido_clip = col_mean_umido.map(clip_ndwi_pantanal);
+var seco_clip = col_mean_seco.map(clip_ndwi_pantanal);
+
+// Limiares (threshold)
+var limiar_ndwi = function (collection) {
+    var limiar = collection.updateMask(collection.gte(-0.4));
+    return limiar;
+}
+
+// Apply threshold
+var limiar_ndwi_umido = umido_clip.map(limiar_ndwi);
+var limiar_ndwi_seco = seco_clip.map(limiar_ndwi);
+Map.addLayer(limiar_ndwi_umido[1]);
+
+// Exporta a image binaria - agua / nao-agua
+Export.image.toDrive({
+    image: limiar_ndwi_umido[1],
+    description: 'limiar_ndwi_umido[1]',
+    region: pantanal,
+    scale: 500,
+    maxPixels: 1e13
+});
+
+
+// Estatisticas:
+// var teste = [];
+// for (var i = 0; i < ndwi_umido.length; i++) {
+//     var img_mean = col_mean_seco[i].select('NDWI').reduceRegions({
+//         collection: pantanal,
+//         reducer: ee.Reducer.mean(),
+//         scale: 500,
+//     });
+//     teste.push(img_mean);
+// }
+
+// print(teste);

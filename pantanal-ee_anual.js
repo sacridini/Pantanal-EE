@@ -44,4 +44,31 @@ var col_mean = ndwi_por_ano.map(calc_mean_by_year);
 Map.addLayer(col_mean[1].select('NDWI'));
 Map.addLayer(pantanal);
 
-// Adicionar funções de limiar
+// Clip collection
+var clip_ndwi_pantanal = function (collection) {
+    var ndwi = collection.select('NDWI');
+    var col_clip = ndwi.clip(pantanal);
+    return col_clip;
+};
+
+// Apply clip
+var ano_clip = col_mean.map(clip_ndwi_pantanal);
+
+// Limiares (threshold)
+var limiar_ndwi = function (collection) {
+    var limiar = collection.updateMask(collection.gte(-0.4));
+    return limiar;
+}
+
+// Apply threshold
+var limiar_ndwi = ano_clip.map(limiar_ndwi);
+Map.addLayer(limiar_ndwi[1]);
+
+// Exporta a image binaria - agua / nao-agua
+Export.image.toDrive({
+    image: limiar_ndwi[1],
+    description: 'limiar_ndwi',
+    region: pantanal,
+    scale: 500,
+    maxPixels: 1e13
+});
