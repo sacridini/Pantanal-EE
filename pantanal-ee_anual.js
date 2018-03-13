@@ -2,7 +2,7 @@
 * pantanal-ee.js
 * Description: Estudos sobre o pantanal
 * Version: 0.0.2
-* MIT (c) Eduardo Ribeiro Lacerda <elacerda@id.uff.br>
+* Eduardo Ribeiro Lacerda <elacerda@id.uff.br>
 */
 
 // Carrega as imagens MODIS e o shapefile do bioma Pantanal dos meus assets
