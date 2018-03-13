@@ -1,7 +1,6 @@
 /** 
 * pantanal-ee.js
-* Description: Estudos sobre o pantanal
-* Version: 0.0.2
+* Description: Estudos sobre o pantanal (anual)
 * Eduardo Ribeiro Lacerda <elacerda@id.uff.br>
 */
 
@@ -39,7 +38,7 @@ var calc_mean_by_year = function (ic_ano) {
 
 // Chama das funções + visualização
 anos.map(filtrar_por_ano);
-// print(ndwi_por_ano);
+print(ndwi_por_ano);
 var col_mean = ndwi_por_ano.map(calc_mean_by_year);
 // print(col_mean);
 Map.addLayer(col_mean[1].select('NDWI'));

@@ -1,7 +1,6 @@
 /** 
 * pantanal-ee.js
-* Description: Estudos sobre o pantanal
-* Version: 0.0.2
+* Description: Estudos sobre o pantanal (sazonal)
 * Eduardo Ribeiro Lacerda <elacerda@id.uff.br>
 */
 
@@ -21,10 +20,11 @@ function calc_ndwi(image) {
     return collection_with_ndwi;
 }
 
-// Array que conterá a coleção MODIS inicial + os NDWI criados pela função anterior
+// Arrays que conterão a coleção MODIS inicial + os NDWI criados pela função anterior
 var ndwi_umido = [];
 var ndwi_seco = [];
 
+// Função para filtrar os dados para o período umido
 var filtrar_umido = function (ano) {
     var image = ee.ImageCollection(modis
         .filterBounds(pantanal)
@@ -33,6 +33,7 @@ var filtrar_umido = function (ano) {
     ndwi_umido.push(image);
 };
 
+// Função para filtrar os dados para o período seco
 var filtrar_seco = function (ano) {
     var image = ee.ImageCollection(modis
         .filterBounds(pantanal)
@@ -41,8 +42,7 @@ var filtrar_seco = function (ano) {
     ndwi_seco.push(image);
 };
 
-
-// Calcula a média de todos os valores dos pixels de forma anual para todos os anos.
+// Calcula a média de todos os valores dos pixels de forma sazonal para todos os anos.
 var calc_mean_by_season = function (ic_season) {
     var image = ic_season.mean();
     return image;
