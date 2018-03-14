@@ -25,7 +25,7 @@ var ndwi_umido = [];
 var ndwi_seco = [];
 
 // Função para filtrar os dados para o período umido
-var filtrar_umido = function (ano) {
+function filtrar_umido (ano) {
     var image = ee.ImageCollection(modis
         .filterBounds(pantanal)
         .filterDate(ano.toString() + '-01-01', ano.toString() + '-04-30')
@@ -34,7 +34,7 @@ var filtrar_umido = function (ano) {
 };
 
 // Função para filtrar os dados para o período seco
-var filtrar_seco = function (ano) {
+function filtrar_seco (ano) {
     var image = ee.ImageCollection(modis
         .filterBounds(pantanal)
         .filterDate(ano.toString() + '-05-01', ano.toString() + '-11-30')

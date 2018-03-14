@@ -22,7 +22,7 @@ function calc_ndwi(image) {
 
 // Array que conterá a coleção MODIS inicial + os NDWI criados pela função anterior
 var ndwi_por_ano = [];
-var filtrar_por_ano = function (ano) {
+function filtrar_por_ano (ano) {
     var image = ee.ImageCollection(modis
         .filterBounds(pantanal)
         .filterDate(ano.toString() + '-01-01', ano.toString() + '-12-31')
